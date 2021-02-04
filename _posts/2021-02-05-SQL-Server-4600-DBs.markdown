@@ -1,0 +1,154 @@
+---
+layout: post
+title:  "Alex, how do we save money on our servers?"
+date:   2021-02-03 04:00:00 -0600
+categories: sqlserver azure cloud migration
+---
+
+# Migrating SQL Server to Azure IaaS w/ 4600 DBs on the server
+
+Oh boy.  The executives asked me how to cut our bills with COVID in the air.  Given our business was hit pretty hard, it was crucial we were able to save every OpEx dollar we could.  I mentioned how much money we could save by shifting our workloads from a dedicated on-prem environment to Azure.
+
+The exec's had their hesitations about data security, privacy, and SLAs.  Without all of the Azure product pages and documentation, I wouldn't have been able to prove how Azure is the future for this org and how it was the right choice, given we're a Microsoft shop.
+
+They were thrilled, and now presented me with the prime objective: **Do this all with no outage**.
+
+I really tried.  I got them to agree on 15 minutes of outage for cutover to the new home, which quickly became 120 minutes as the project's strategy devolved and evolved.
+
+The org here follows the "One DB per Tenant" model, based on the Founder's decision many moons ago.  The glorious founders also had a fallout when acquired, and decided to nuke their git repositories and leave us with compiled .NET apps running in IIS.  So re-architecture is a huge effort, and we wanted to see some cost savings before that.  Now that we're in Azure IaaS, moving customer data into a serverless architecture like [Managed SQL Databases](https://docs.microsoft.com/en-us/azure/azure-sql/database/sql-database-paas-overview) or [CosmosDB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) when the time comes, should be much faster compared to if we tried this from the on-prem environment.
+
+The org's app, a WinForms technology, connects directly to the SQL Server over the public net _shudder_.
+
+# The Legacy Environment
+
+Two of these servers, running Windows Server 2012 R2, operating a SQL Server [Failover Cluster Instance](https://docs.microsoft.com/en-us/sql/sql-server/failover-clusters/windows/always-on-failover-cluster-instances-sql-server?view=sql-server-ver15)
+
+* 2x Xeon E5-2640 
+* 64GB RAM
+* (I think?) they were PowerEdge R720's.  Not totally sure.
+* 2x Cisco ASA 5515-X, HA Pair
+* Some "managed storage" solution the on-prem host had for us.  It was dirt slow.  Like 50mbit on a good day, slow.
+* SQL Server 2012 SP3
+
+# The Iaas Environment
+
+Because we needed to literally, copy the environment, we chose Azure VM's (IaaS) as the deployment method.
+
+* 2x D16s_v4 VM's
+* Azure Shared Disks for storage
+* Azure Internal Load Balancer (because Floating IP)
+* Azure Firewall (to open the DB server up to client apps)
+* Some custom SQL Server Agent Jobs based off [Ola Hallengren's work](https://ola.hallengren.com/), to back up to Azure Blob Storage.
+* An Azure Automation to automatically prune old database backups from Blob Storage.
+* SQL Server 2012 SP4*
+
+# How do we move 1.25TB of customer data associated with SQL Server
+
+* To a new datacenter
+* With minimal outage.
+
+Did I mention we're only licensed for SQL Server Standard?  This meant using [AAG's](https://docs.microsoft.com/en-us/sql/database-engine/availability-groups/windows/overview-of-always-on-availability-groups-sql-server?view=sql-server-ver15) to shift load was out of the question.  If only a replication technology existed, where we could easily replicate every database to a new home.
+
+[Database Replication](https://www.sqlshack.com/sql-server-replication-overview-of-components-and-topography/) didn't seem like a good fit, because it meant we had to duplicate "publisher" databases on the original server.
+
+[Multi-Subnet Failover Cluster](https://docs.microsoft.com/en-us/sql/sql-server/failover-clusters/windows/sql-server-multi-subnet-clustering-sql-server?view=sql-server-ver15) couldn't work, because the on-prem environment was joined to the hosting provider's AD domain, which we would no longer be a part of once we were in Azure IaaS.
+
+So, this left me with two options.
+
+* Database Mirroring, which seemed like the better choice, because of it's synchronous commit strategy.
+* Log Shipping, didn't really appeal to me as it was a technology originating in SQL Server 2005.  Alas, it's tried and true, and got the job done for us.
+
+# Preparation
+
+### Setting up SQL FCi in Azure
+
+[This doc](https://docs.microsoft.com/en-us/azure/azure-sql/virtual-machines/windows/failover-cluster-instance-azure-shared-disks-manually-configure?tabs=windows2012) was really easy to follow and definitely helped me figure out how the solution needed to be architected given it's constraints.  We +1'd and used [Azure Active Directory Domain Services](https://docs.microsoft.com/en-us/azure/active-directory-domain-services/overview) to host the AD Domain Controllers needed for SQL Server and the Failover Cluster.
+
+Between these two, I had the new infra set up before lunch.  Hats off to this one Microsoft, you really put the effort in to make sure the customers would have the resources needed to adopt.
+
+### Testing the new database server
+
+So this one was pretty straight forward.  Given our app is WinForms, I just modified a system's `hosts` file and dedicated it as "the test bed."  I backed up and restored a test database from the old server to the new, and had the support team on their merry way pretending to sell ourselves snacks, trading cards, and magazines.  It was a really nice feeling that within one full working day, we were able to get our new home configured and prove it was a viable option.
+
+Now, how back to the big question: How do we move 1.25TB of data to the cloud with minimal outage?
+
+# Migration Take 1: Database Mirroring
+
+So, we tried Database Mirroring.  Darn me for not observing the [deprecation announcement](https://docs.microsoft.com/en-us/sql/database-engine/database-mirroring/database-mirroring-sql-server?view=sql-server-ver15) for this feature.  It worked well until I got to about 10% of our total number of databases being mirrored.  At that point, we saturated the ASA and couldn't proceed without losing a significant number of packets.
+
+### Setting up Mirroring
+
+We had to configure the endpoints for [Certificate based Auth](https://docs.microsoft.com/en-us/sql/database-engine/database-mirroring/example-setting-up-database-mirroring-using-certificates-transact-sql?view=sql-server-ver15) because of the multiple AD domains in play.  It was a little confusing at first, but I perservered!
+
+### Moving the DBs
+
+Using some bash and [sqlcmd for linux](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools?view=sql-server-ver15), I was able to cook up what was needed to:
+
+1. Get all the DB names
+1. For each DB
+    1. On the original server
+        1. Take a `FULL` backup in SQL Server
+        1. Send it to Blob Storage.
+    1. On the new server
+        1. Create a new DB with the same name
+        1. Restore the backup from Blob Storage
+        1. Setup mirroring, like `ALTER DATABASE SET PARTNER`
+    1. Back to the original
+        1. Finalize the mirroring configuration, again with `ALTER DATABASE SET PARTNER`
+
+Surprisingly, this was fairly effective.  It took about 2 hours to get through the first 400 DBs, before we completely saturated the ASA with mirroring packets.  If we had less DB's, I would've definitely stuck with mirroring as the manual failover was exactly what we needed.
+
+**Alas, Database Mirroring proved ineffective**.  This left one option: the tried and true, Log Shipping.
+
+# Take 2: Log Shipping
+
+Okay so initially, I wasn't thrilled with this approach.  Log Shipping itself is a tried and true method, but really took some effort and critical thinking to set this up en-masse for 4600 DBs.  I specifically didn't like how SQL Server Agent maintained the job schedules, would reset "Next Run" times on every service restart, and in general didn't have much in the "Reliability" category.  If the log chain got broken at any point, for any reason (*cough* premature job exit *cough*), you had to tear it down and start over with that DB.  
+
+So, at first I wrote some T-SQL to distribute the job "Next Run" times evenly.  4600 jobs on the original server, and (4600x2) jobs on the new server seemed like an insane number to manage.  It was brittle, and at this point I lost some hope.  I couldn't feasbily move all these DBs with minimal outage.
+
+At least, we could monitor the health of our mass replication, using [this scheduled email report](https://www.mssqltips.com/sqlservertip/4463/sql-server-log-shipping-monitoring-and-email-notification/).
+
+# Take 2.5: Enter sp_allNightLog
+
+Hats off [Brent Ozar](https://www.brentozar.com/), [sp_allNightLog](https://www.brentozar.com/sp_allnightlog/) gave me the foundation I needed to make en-masse log shipping reliable.  I forked it and heavily modified it for the org's needs, but it worked, and gave me some much needed hope that this was project was feasible.  
+
+Instead of relying on SQL Server Agent Job schedulding, we created another database on each server, holding a queue table.  We had 20 SQL Server Agent Jobs, running sp_allNightLog, in Backup mode on the original server, and Restore mode on the new home.  The jobs would work through the queue, running the `LSBackup_` job for each DB in queue.  Once the Log Shipping Backup job would be completed, we would use a [Linked Server](https://www.sqlshack.com/how-to-create-and-configure-a-linked-server-in-sql-server-management-studio/) query to tell the Restore workers on the other server that this DB is ready for restore.  This wasn't totally necessary, but it seemed better to prioritize databases in the queue that we know are waiting on a restore worker.  Finally, some modifications on both ends for a "failover now" signal, so we could automatically promote the DBs on the new home to primary/online state.
+
+Combined with all this knowledge and tooling, we moved the majority of the 1.25TB behind the scenes from our customers.  When it came time for our 120 minute maintenance window, we applied the "failover now" flag to all DBs in the queue, and watched it go.  Well.  All in all, it ended up taking 90 minutes from clock-start to new-server-available status.  
+
+# I did it!
+
+I beat my predecessors migration time by 7 hours and 30 minutes (they took 9 hours).  
+
+Last time the org had to move, they opted for a simpler approach.  Granted, that migration didn't require moving to a new datacenter, as it was just a hardware upgrade in the old home.
+
+* Close firewall for SQL Server so only the admin could log in
+* Detach all DBs in SQL Server
+* Copy the data files to the new SAN
+* Attach all DBs in SQL Server
+* Why doesn't it work?  Cue, stopwatch.
+* Oh, we forgot to copy SQL Server Logins.  Oops....
+
+
+
+# Reflection
+
+### What could I have done better?
+
+I could have taken more time to measure performance metrics with the number of sp_allNightLog workers.  The recommendation given with that script is not to go over 20 workers, but I feel with the raw amount of compute we had at our disposal, more workers could've been more effecient.  This might've been able to reduce the 90 minute cutover window, but we were too far along and running short on time for delivery of the migration.
+
+I could have paid more attention that we weren't running SQL Server 2012 SP4 in the old environment, despite the providers "managed patching" they said they do for us...  This ended up causing a 62 minute outage the first time we failed over to the alternate node in the Azure VM environment.  Don't you just love the 1am call with the automated voice: "SQL Server Cluster is not responding."  It felt dystopian, I thought we were done, and alas, we weren't.  SQL Server decided it needed to touch every data file as part of the SP3 to SP4 patch procedure.  All in all, a ROWS file and a LOG file for each db, (so like 9200 files?), were patched in 62 minutes.  I was impressed it didn't go on longer.
+
+### What did I learn?
+
+Don't give up.  
+
+Find a way.  
+
+Even if it takes a significant level of effort and finesse, there is a way.
+
+Architect for serverless.
+
+Don't run production apps you lost the source to.  Just rewrite it.
+
+It's late.  I need to get some sleep...
