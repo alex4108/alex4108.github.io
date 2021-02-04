@@ -21,7 +21,8 @@ paginate: 10
 gems: [jekyll-paginate]
 plugins: 
   - jekyll-seo-tag
-
+  - jemoji
+  
 # SEO
 
 social:
