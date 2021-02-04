@@ -3,7 +3,7 @@ name: Alex Schittko
 title: The world through my eyes
 description: A Blog, by Alex Schittko, Class of UT Dallas 2022
 avatar: https://avatars.githubusercontent.com/u/7796475?s=460&v=4
-github_username: alex4108
+github_username: https://github.com/alex4108
 
 plugins:
   - jekyll-feed
