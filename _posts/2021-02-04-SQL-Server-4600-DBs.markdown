@@ -3,7 +3,7 @@ layout: post
 title:  "Alex, how do we save money on our SQL servers?"
 date:   2021-02-04 04:00:00 -0600
 categories: sqlserver azure cloud migration
-excerpt: A story about how we moved 4600 DBs (1.25TB) of SQL Server 2012 databases to a home over yonder on the Internet, in about 90 minutes.
+excerpt: A story about how we moved 4600 DBs (1.25TB) of SQL Server 2012 databases to a home over yonder on the Internet, in about 90 minutes, for a 30% cost reduction.
 ---
 
 # Migrating SQL Server to Azure IaaS w/ 4600 DBs on the server
