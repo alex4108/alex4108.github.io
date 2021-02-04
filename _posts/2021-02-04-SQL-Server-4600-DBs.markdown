@@ -141,11 +141,11 @@ I could have paid more attention that we weren't running SQL Server 2012 SP4 in 
 
 ### What did I learn?
 
-Don't give up.  :exclamation:
+Don't give up.
 
-Find a way.  :exclamation:
+Find a way.
 
-Even if it takes a significant level of effort and finesse, there is a way. :smile:
+Even if it takes a significant level of effort and finesse, there is a way.
 
 Architect for serverless. 
 
