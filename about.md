@@ -123,77 +123,77 @@ This one gets it's own section, because why not?
 
 In my current role with a Point of Sale SaaS provider, we heavily use AWS to operate development, test, and production workloads.  I'll go ahead and list every AWS service I've used and worked with here.
 
-* RDS
+### RDS
 
 Because managing databases without it is just too much.  RDS gives us the availability and fault tolerances we need to operate at scale.
 
-* Systems Manager (SSM)
+### Systems Manager (SSM)
 
 _Mostly_ use this for parameter store, to keep secrets out of ECS Task Definitions.
 
-* EC2
+### EC2
 
 Per-customer isolated virtual machines, for PCI compliance.
 
-* ECS + ECR
+### ECS + ECR
 
 To run our web service APIs
 
-* S3
+### S3
 
 For static website hosting, and just general object storage.
 
-* Lambda + API Gateway
+### Lambda + API Gateway
 
 Because serverless is the future!
 
-* Kineses Firehose
+### Kineses Firehose
 
 For big-data pipelines so we can aggregate POS metrics and data into our Redshift warehouse
 
-* Redshift
+### Redshift
 
 See above!
 
-* EFS
+### EFS
 
 When we need an NFS mount
 
-* DynamoDB
+### DynamoDB
 
 This one gets used very lightly because of costs, it holds some configuration data for some of our web services to load into cache upon init.
 
-* ElastiCache
+### ElastiCache
 
 Because managed services for Redis and Memcached is the way!  Build cattle, not pets!
 
-* VPC
+### VPC
 
 Really?  Without a VPC you get nowhere.  Regardless, NAT Gateways are not Internet Gateways, and VPN tunnels come in handy when you need a tunnel onsite.  Similarly, VPC peering makes for an easy way to have _one_ jumphost to rule them all!
 
-* Route 53
+### Route 53
 
 Because DNS needs to be availabile, everywhere, and update, fast!
 
-* CloudFormation
+### CloudFormation
 
 Honestly, not a huge fan.  Prefer Terraform.  CloudFormation's "Delete and Create" update functionality really killed me a few times getting started with it.
 
-* CloudWatch
+### CloudWatch
 
 Metrics, Metrics, Metrics!  Metrics give us valuable insights about how our services are operating, be it AWS provided metrics or our own custom metrics.
 
 Also, CloudWatch Logs.
 
-* Ground Station
+### Ground Station
 
 If I ever needed a satellite link, I would probably use this.  Seems quicker than provisioning a satellite array...
 
-* Elastic Load Balancing
+### Elastic Load Balancing
 
 Because Multi-AZ architectures are the way.  You don't want a single AZ outage to offline your services, do you?
 
-* Certificate Manager
+### Certificate Manager
 
 When I can't use acme.sh, like in the context of [Application Load Balancers](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html) I use ACM.
 
@@ -201,27 +201,27 @@ When I can't use acme.sh, like in the context of [Application Load Balancers](ht
 
 It's not number two in my heart, but it's number two in my skillset.  As I grow, I'll use Azure more for my online services.
 
-* Azure VMs
+### Azure VMs
 
 Probably the most useful service I've found yet.  With built-in's like [Tardigrade](https://azure.microsoft.com/en-us/blog/improving-azure-virtual-machines-resiliency-with-project-tardigrade/) and the possibility of adding resources without a requiring a VM reboot, I definitely prefer Azure VM's over Amazon EC2.
 
 Plus, Azure had native VM [Backup](https://docs.microsoft.com/en-us/azure/backup/backup-azure-vms-introduction) before [AWS Backup](https://aws.amazon.com/backup/) existed.  +1 for Azure!
 
-* Azure Storage Accounts
+### Azure Storage Accounts
 
 Blob storage is _much_ cheaper than S3 if used appropriately.  Plus with [Azure Files](https://azure.microsoft.com/en-us/services/storage/files/), I can provision SMB mounts with a few button clicks or a Terraform deployment.  Dang, that was easy!  Time for coffee...
 
 Alas, I haven't worked much with Queues in Azure Storage Accounts.  One day I might pick that up...
 
-* Azure Load Balancing
+### Azure Load Balancing
 
 I really enjoy how LB's in Azure offer the ability to pool outbound connections from the VMs, as well as incoming connections, unlike Amazon's Elastic Load Balancing.  
 
-* Azure Automate
+### Azure Automate
 
 Okay this one is really cool, I used the python3 beta runtime once to automate cleaning of scheduled backups.  I must say, getting off the ground with python3 because of the weird way Automate handles dependencies was tricky, but once I figured it out, it was all smooth sailing.  I like Azure Automate!
 
-* Azure Traffic Manager
+### Azure Traffic Manager
 
 The service is comparable to Amazon's Route 53 [route policies](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html), and became super useful during one of our org's migrations into Azure that I headed up.  The use case was simple: we wanted to incrementally shift production load to Azure, so we could monitor for failure and correct as needed, before opening the flood gates.  
 

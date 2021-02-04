@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "Welcome!"
+date:   2021-02-04 01:01:57 -0600
+# categories: 
+---
+This looks like it'll work nicely.
+
+Check out my [about me](/about) while I work on some posts...
+
+{% highlight bash %}
+echo "Hello World!"
+{% endhighlight %}
+

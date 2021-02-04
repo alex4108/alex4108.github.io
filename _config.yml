@@ -10,7 +10,9 @@ title: The world through my eyes
 email: alex.schittko@utdallas.edu
 description: | # this means to ignore newlines until "baseurl:"
   A blog, by Alex Schittko
+
   Univeristy of Texas at Dallas, Class of 2022
+  
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://schittko.me" # the base hostname & protocol for your site
 github_username:  alex4108
