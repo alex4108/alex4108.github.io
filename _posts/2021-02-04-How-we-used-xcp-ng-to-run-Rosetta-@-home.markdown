@@ -3,7 +3,7 @@ layout: post
 title:  "How we used XCP-ng to run Rosetta@Home"
 date:   2021-02-04 02:38:00 -0600
 categories: linux vm xcp-ng Rosetta@Home
-excerpt: We built a "private cloud" in the apartment's closet to give us a place to test and deploy projects.  We allocated 2/3 of the project to Rosetta@Home, in the name of volunteering and charity.
+description: We built a "private cloud" in the apartment's closet to give us a place to test and deploy projects.  We allocated 2/3 of the project to Rosetta@Home, in the name of volunteering and charity.
 ---
 
 # The Project

@@ -19,3 +19,13 @@ markdown: kramdown
 permalink: /:year/:month/:day/:title/
 paginate: 10
 gems: [jekyll-paginate]
+plugins: 
+  - jekyll-seo-tag
+
+# SEO
+
+social:
+  name: Alex Schittko
+  links:
+    - https://github.com/alex4108/
+    - https://linkedin.com/in/aschittko
