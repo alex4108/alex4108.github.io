@@ -19,3 +19,5 @@ github_username:  alex4108
 
 # Build settings
 markdown: kramdown
+
+theme: jekyll-theme-midnight
