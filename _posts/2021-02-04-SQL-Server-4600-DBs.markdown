@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Alex, how do we save money on our servers?"
-date:   2021-02-03 04:00:00 -0600
+title:  "Alex, how do we save money on our SQL servers?"
+date:   2021-02-04 04:00:00 -0600
 categories: sqlserver azure cloud migration
 ---
 
