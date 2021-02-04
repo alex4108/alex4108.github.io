@@ -15,6 +15,9 @@ title: Archives
 			{% else %}
 				<h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
 			{% endif %}
+
+			<div class="post-content">{{ post.excerpt }}<br /><i><a href="{{ post.url }}">Read more here</a></i></div>
+
 		</article>
 	{% endfor %}
 
