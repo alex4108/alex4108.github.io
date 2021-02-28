@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Public access to an Azure SQL IaaS Failover Cluster Instance: HAProxy to the rescue!"
-date:   2021-02-04 01:01:57 -0600
+date:   2021-02-27 18:57:00 -0600
 description: A journey of publicly exposing a SQL FCI on Azure IaaS using Azure Load Balancer, Azure Firewall, and HAProxy
 # categories: 
 ---
