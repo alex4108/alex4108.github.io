@@ -31,7 +31,7 @@ Two of these servers, running Windows Server 2012 R2, operating a SQL Server [Fa
 * Some "managed storage" solution the on-prem host had for us.  It was dirt slow.  Like 50mbit on a good day, slow.
 * SQL Server 2012 SP3
 
-# The Iaas Environment
+# The IaaS Environment
 
 Because we needed to literally, copy the environment, we chose Azure VM's (IaaS) as the deployment method.
 
