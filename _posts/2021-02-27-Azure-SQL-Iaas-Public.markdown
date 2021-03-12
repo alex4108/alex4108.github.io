@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Public access to an Azure SQL IaaS Failover Cluster Instance: HAProxy to the rescue!"
-date:   2021-02-27 18:57:00 -0600
+date:   2021-03-12 17:03:00 -0600
 description: A journey of publicly exposing a SQL FCI on Azure IaaS using Azure Load Balancer, Azure Firewall, and HAProxy
 # categories: 
 ---
@@ -65,3 +65,24 @@ listen l1
 And like magic, we now have a "dumb packet forwarder" at $0.09 per hour (x2 for high availability, so really $0.18) that allows our SQL Server Failover Cluster Instance on Azure IaaS to be publicly exposed.  
 
 If we take the savings from Azure Firewall versus HAProxy, we're looking at a cost reduction of $0.82/hour, just to forward packets.  I hope with these savings, my CFO can buy me a coffee (or two)!
+
+### Take 4: Tell Windows Server Failover Cluster about the Public Load Balancer's Address.
+
+So this one was interesting to me.  It goes against everything I know as a junior network engineer, but hey, it works.
+
+In [this doc](https://docs.microsoft.com/en-us/azure/azure-sql/virtual-machines/windows/failover-cluster-instance-vnn-azure-load-balancer-configure#configure-cluster-probe) there's a powershell snippet to configure "the health probe" of the WSFC Role for SQL Server.  This not only creates a health probe available on 59999/tcp, but also modifies the IP address that the SQL Server instance listens on.
+
+```
+$ClusterNetworkName = "<Cluster Network Name>"
+$IPResourceName = "<SQL Server FCI / AG Listener IP Address Resource Name>" 
+$ILBIP = "<n.n.n.n>" 
+[int]$ProbePort = <nnnnn>
+
+Import-Module FailoverClusters
+
+Get-ClusterResource $IPResourceName | Set-ClusterParameter -Multiple @{"Address"="$ILBIP";"ProbePort"=$ProbePort;"SubnetMask"="255.255.255.255";"Network"="$ClusterNetworkName";"EnableDhcp"=0}
+```
+
+Turns out, you can set `<n.n.n.n>` to the Public IP associated with the Azure Load Balancer's Frontend configuration.  Provided Floating IP is enabled on the load balancer rule, this enables publicly routable connectivity to the SQL Server instance.
+
+I'd like to credit Ashan Nanayakkara from Microsoft Azure Networking support who had the bright idea, "set this to the public IP," that eventually lead to this discovery.
