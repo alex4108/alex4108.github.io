@@ -6,10 +6,10 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: The world through my eyes
-email: alex.schittko@utdallas.edu
+title: Alex Schittko
+email: aschittko@utdallas.edu
 description: | 
-  A blog, by Alex Schittko
+  My achievments and findings throughout my studies in Computer Science
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://schittko.me" # the base hostname & protocol for your site
 github_username:  alex4108
