@@ -1,0 +1,70 @@
+---
+layout: page
+title: Work
+description: Selected infrastructure case studies and public tools, focused on reliable change, operational leverage, and practical constraints.
+permalink: /work/
+---
+<section aria-labelledby="case-studies-title">
+  <div class="section-heading">
+    <p class="eyebrow">Case studies</p>
+    <h2 id="case-studies-title">Architecture under real constraints</h2>
+  </div>
+
+  <article class="case-study">
+    <h3><a href="{{ '/2021/02/04/SQL-Server-4600-DBs/' | relative_url }}">Migrating 4,600 SQL Server databases</a></h3>
+    <p>Legacy binaries, SQL Server Standard licensing, separate domains, limited network capacity, and a strict maintenance window ruled out the cleanest textbook paths. The migration used queue-driven log shipping to move most data ahead of cutover and promote databases in a controlled final window.</p>
+    <dl class="proof-strip proof-strip--compact">
+      <div><dt>4,600</dt><dd>databases</dd></div>
+      <div><dt>1.25 TB</dt><dd>migrated</dd></div>
+      <div><dt>90-minute</dt><dd>cutover</dd></div>
+      <div><dt>30%</dt><dd>lower operating cost</dd></div>
+    </dl>
+    <p class="card-link"><a href="{{ '/2021/02/04/SQL-Server-4600-DBs/' | relative_url }}">Read the full migration case study <span aria-hidden="true">→</span></a></p>
+  </article>
+
+  <article class="case-study">
+    <h3><a href="{{ '/2021/03/12/Azure-SQL-Iaas-Public/' | relative_url }}">Designing public connectivity for an Azure SQL FCI</a></h3>
+    <p>A series of tested designs compared Azure load-balancing, firewall DNAT, and HAProxy paths for connecting to a SQL Server Failover Cluster Instance. The work kept connectivity, high availability, and operating cost in the same architectural decision.</p>
+    <p class="card-link"><a href="{{ '/2021/03/12/Azure-SQL-Iaas-Public/' | relative_url }}">Read the connectivity and cost case study <span aria-hidden="true">→</span></a></p>
+  </article>
+
+  <article class="case-study">
+    <h3><a href="https://github.com/alex4108/ha-kbeacon-ring" rel="external">KBeacon Ring for Home Assistant</a></h3>
+    <p>This local-push integration connects to KBeacon and Blue Charm BLE tags through Home Assistant Bluetooth proxies. It handles challenge-response authentication, drives audible or visual ring commands, and turns physical tag gestures into automation events without a cloud service.</p>
+    <p class="card-link"><a href="https://github.com/alex4108/ha-kbeacon-ring" rel="external">View KBeacon Ring on GitHub <span aria-hidden="true">→</span></a></p>
+  </article>
+</section>
+
+<section aria-labelledby="projects-title">
+  <div class="section-heading">
+    <p class="eyebrow">Selected projects</p>
+    <h2 id="projects-title">Tools that remove repeat work</h2>
+  </div>
+
+  <div class="project-list">
+    <article>
+      <h3><a href="https://github.com/alex4108/AstroInstaller" rel="external">AstroInstaller</a></h3>
+      <p>PowerShell deployment tooling for an ASTRONEER dedicated server and its Windows dependencies, including unattended installation options.</p>
+    </article>
+    <article>
+      <h3><a href="https://github.com/alex4108/meshfleet" rel="external">Meshfleet</a></h3>
+      <p>Declarative, staged BLE management for a small Meshtastic fleet, with dry runs and read-back verification of resulting device state.</p>
+    </article>
+    <article>
+      <h3><a href="https://github.com/alex4108/discord-photo-reaper" rel="external">Discord Photo Reaper</a></h3>
+      <p>A Go service that archives files from a Discord guild to Google Drive or OneDrive, with stateful runs and rate-limit backoff.</p>
+    </article>
+    <article>
+      <h3><a href="https://github.com/alex4108/bitbucket-azuredevops-migrate" rel="external">Bitbucket-to-Azure-DevOps migration tooling</a></h3>
+      <p>Shell tooling that maps and migrates Git repositories while preserving commit history and branches, with an explicit guarded cleanup path.</p>
+    </article>
+    <article>
+      <h3><a href="https://github.com/alex4108/jellycleaner" rel="external">Jellycleaner</a></h3>
+      <p>A Go application for managing media lifecycle across Jellyfin, Jellyseerr, Sonarr, and Radarr.</p>
+    </article>
+    <article>
+      <h3><a href="https://github.com/alex4108/Approova" rel="external">Approova</a></h3>
+      <p>A Discord bot that lets designated existing members approve new members and assign access after approval.</p>
+    </article>
+  </div>
+</section>

@@ -14,7 +14,7 @@ a:hover {
 	color: #2aa198;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
 	color: #cb4b16;
 }
 
@@ -25,6 +25,11 @@ h1 a, h1 a:visited, h1 a:active {
 h1 a:hover {
 	background-color: #073642;
 	border-color: #073642;
+	color: #cb4b16;
+}
+
+#header .site-title a:hover {
+	background-color: #073642;
 	color: #cb4b16;
 }
 

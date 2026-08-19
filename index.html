@@ -1,48 +1,67 @@
 ---
 layout: default
+title: Platform engineering for systems that can’t afford surprises.
+description: Alex Schittko modernizes legacy systems, automates operational toil, and builds reliable, cost-conscious platforms across cloud, containers, data, and open source.
 ---
+<section class="hero" aria-labelledby="hero-title">
+  <p class="eyebrow">Platform engineering · automation · open source</p>
+  <h1 id="hero-title">Platform engineering for systems that can’t afford surprises.</h1>
+  <p class="lead">Alex modernizes legacy systems, automates operational toil, and builds reliable, cost-conscious platforms across cloud, containers, data, and open source.</p>
+  <p class="hero-links"><a class="button-link" href="{{ '/work/' | relative_url }}">Explore the work</a> <a href="https://github.com/alex4108" rel="me external">View GitHub</a></p>
+</section>
 
-{% for post in paginator.posts %}
+<section class="proof" aria-labelledby="proof-title">
+  <div class="section-heading">
+    <h2 id="proof-title">One migration, measured</h2>
+    <p>Results from the <a href="{{ '/2021/02/04/SQL-Server-4600-DBs/' | relative_url }}">SQL Server migration case study</a>.</p>
+  </div>
+  <dl class="proof-strip">
+    <div><dt>4,600</dt><dd>databases</dd></div>
+    <div><dt>1.25 TB</dt><dd>migrated</dd></div>
+    <div><dt>90-minute</dt><dd>cutover</dd></div>
+    <div><dt>30%</dt><dd>lower operating cost</dd></div>
+  </dl>
+</section>
 
-	<article class="post">
+<section aria-labelledby="selected-work-title">
+  <div class="section-heading">
+    <p class="eyebrow">Selected case studies</p>
+    <h2 id="selected-work-title">Systems work with the constraints left in</h2>
+  </div>
+  <div class="card-grid">
+    <article class="work-card">
+      <h3><a href="{{ '/2021/02/04/SQL-Server-4600-DBs/' | relative_url }}">SQL Server migration</a></h3>
+      <p>Moved a large one-database-per-tenant estate to Azure IaaS by adapting queue-based log shipping around licensing, network, and downtime constraints.</p>
+      <p class="card-link"><a href="{{ '/2021/02/04/SQL-Server-4600-DBs/' | relative_url }}">Read the case study <span aria-hidden="true">→</span></a></p>
+    </article>
+    <article class="work-card">
+      <h3><a href="{{ '/2021/03/12/Azure-SQL-Iaas-Public/' | relative_url }}">Azure SQL FCI connectivity and cost design</a></h3>
+      <p>Worked through load-balancing and DNAT options for a public SQL Server failover cluster, testing each path against reliability and cost.</p>
+      <p class="card-link"><a href="{{ '/2021/03/12/Azure-SQL-Iaas-Public/' | relative_url }}">Read the case study <span aria-hidden="true">→</span></a></p>
+    </article>
+    <article class="work-card">
+      <h3><a href="https://github.com/alex4108/ha-kbeacon-ring" rel="external">KBeacon Ring</a></h3>
+      <p>A local-push Home Assistant integration for ringing BLE tags and receiving physical-button events, built from the public protocol SDK.</p>
+      <p class="card-link"><a href="https://github.com/alex4108/ha-kbeacon-ring" rel="external">View the public repository <span aria-hidden="true">→</span></a></p>
+    </article>
+  </div>
+  <p><a href="{{ '/work/' | relative_url }}">See all selected projects <span aria-hidden="true">→</span></a></p>
+</section>
 
-		{% if post.external-url %}
-			<h1>
-				<a href="{{ post.external-url }}">{{ post.title }}</a>
-				<a class="anchor" href="{{ post.url }}"><i class="icon-anchor"></i></a>
-			</h1>
-		{% else %}
-			<h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
-		{% endif %}
+<section aria-labelledby="principles-title">
+  <div class="section-heading">
+    <p class="eyebrow">Operating principles</p>
+    <h2 id="principles-title">Make change observable and recoverable</h2>
+  </div>
+  <ul class="principles-list">
+    <li><strong>Verify resulting state.</strong> A successful command is not the same as a correct system.</li>
+    <li><strong>Automate toil.</strong> Repetition is a signal to build a safer path.</li>
+    <li><strong>Stage reversible change.</strong> Reduce blast radius and keep a tested way back.</li>
+    <li><strong>Treat cost, security, and operability as architecture.</strong> They are design inputs, not cleanup work.</li>
+  </ul>
+</section>
 
-		<div class="post-content">{{ post.description }}<br /><i><a href="{{ post.url }}">Read more here</a></i></div>
-
-	</article>
-
-{% endfor %}
-
-
-
-{% if paginator.total_pages > 1 %}
-	<div class="postnavigation">
-
-		{% if paginator.previous_page %}
-			{% if paginator.page == 2 %}
-				<a class="prev left" href="/">&larr; Newer</a>
-			{% else %}
-				<a class="prev left" href="/page{{paginator.previous_page}}/">&larr; Newer</a>
-			{% endif %}
-		{% else %}
-			<span class="nope left">&larr; Newer</span>
-		{% endif %}
-
-		<span class="pages">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
-
-		{% if paginator.next_page %}
-			<a class="next right" href="/page{{paginator.next_page}}/">Older &rarr;</a>
-		{% else %}
-			<span class="nope right">Older &rarr;</span>
-		{% endif %}
-
-	</div>
-{% endif %}
+<section class="writing-callout" aria-labelledby="writing-title">
+  <h2 id="writing-title">Writing</h2>
+  <p>Implementation notes and case studies stay available in the <a href="{{ '/archives/' | relative_url }}">writing archive</a> and <a href="{{ '/feed.xml' | relative_url }}">RSS feed</a>.</p>
+</section>

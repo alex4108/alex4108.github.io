@@ -1,85 +1,46 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-
-  <meta charset="UTF-8">
-  <title>{{ site.title }}</title>
-  <meta name="viewport" content="width=device-width">
-
-  <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-
-  <link href="/assets/css/style.css" rel="stylesheet" />
-  <link href="/assets/css/colors-dark.css" rel="stylesheet" />
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   {% seo %}
-
-  <meta name="google-site-verification" content="KW_c2jmX2rqgRNGSkikiIsGAIIoMZbm3T_Rt0JLk8_Y" />
-  <meta name="msvalidate.01" content="957245CCB2EFACBCCD7AAEE509A1841C" />
-  
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/colors-dark.css' | relative_url }}">
+  <meta name="google-site-verification" content="KW_c2jmX2rqgRNGSkikiIsGAIIoMZbm3T_Rt0JLk8_Y">
+  <meta name="msvalidate.01" content="957245CCB2EFACBCCD7AAEE509A1841C">
 </head>
-
 <body>
-
-
+  <a class="skip-link" href="#content">Skip to content</a>
 
   <header id="header">
-    <h1><a href="/"><i class="icon-sun"></i> {{ site.title }}</a></h1>
-    <p>{{ site.description }}</p>
+    <p class="site-title"><a href="{{ '/' | relative_url }}"><i class="icon-sun" aria-hidden="true"></i> {{ site.title }}</a></p>
+    <p class="site-description">{{ site.tagline }}</p>
   </header>
 
-
-
   <div id="page">
-
-
-
-    <div id="sidebar">
-      <nav>
+    <aside id="sidebar">
+      <nav aria-label="Primary navigation">
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/archives">Archive</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="https://github.com/alex4108">GitHub</a></li>
-          <li><a href="https://linkedin.com/in/aschittko">LinkedIn</a></li>
-          <li><a href="/feed.xml">RSS Feed</a></li>
+          <li><a href="{{ '/' | relative_url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>Home</a></li>
+          <li><a href="{{ '/work/' | relative_url }}"{% if page.url == '/work/' %} aria-current="page"{% endif %}>Work</a></li>
+          <li><a href="{{ '/archives/' | relative_url }}"{% if page.url == '/archives/' %} aria-current="page"{% endif %}>Writing / Archive</a></li>
+          <li><a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>About</a></li>
+          <li><a href="https://github.com/alex4108" rel="me external">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/aschittko" rel="me external">LinkedIn</a></li>
+          <li><a href="{{ '/feed.xml' | relative_url }}">RSS</a></li>
         </ul>
       </nav>
-    </div>
+    </aside>
 
-
-
-    <div id="content">
+    <main id="content" tabindex="-1">
       {{ content }}
-    </div>
-
-
-
+    </main>
   </div>
 
-
-
   <footer id="footer">
-    <p class="copyright" style="text-align: center">
-      BS Computer Science, Erik Jonsson School of Engineering and Computer Science at University of Texas at Dallas<br />
-      Class of 2021<br />
-      Whoosh!<br /></p>
-    <p class="copyright" style="text-align: center">Copyright &copy; {{ site.time | date: '%Y' }} Alex Schittko. Powered by <a href="http://jekyllrb.com">Jekyll</a>, theme by <a href="http://www.webmaster-source.com">Matt Harzewski</a></p>
+    <p class="copyright">&copy; {{ site.time | date: '%Y' }} Alex Schittko.</p>
+    <p class="site-credit">Built with <a href="https://jekyllrb.com" rel="external">Jekyll</a>. Original theme by <a href="https://www.webmaster-source.com" rel="external">Matt Harzewski</a>.</p>
   </footer>
-
-
-
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-  <script src="/assets/js/jquery.mobilemenu.min.js"></script>
-
-  <script>
-    $(document).ready(function(){
-      $('#sidebar nav ul').mobileMenu({'topOptionText': 'Menu', 'prependTo': '#sidebar nav'});
-    });
-  </script>
-
-
-
 </body>
 </html>
