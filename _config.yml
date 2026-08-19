@@ -1,32 +1,35 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
-
 # Site settings
 title: Alex Schittko
-email: aschittko@utdallas.edu
-description: | 
-  My achievments and findings throughout my studies in Computer Science
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://schittko.me" # the base hostname & protocol for your site
-github_username:  alex4108
+tagline: Reliable platforms, deliberate change.
+description: >-
+  Alex Schittko modernizes legacy systems, automates operational toil, and builds
+  reliable, cost-conscious platforms across cloud, containers, data, and open source.
+url: "https://schittko.me"
+baseurl: ""
+lang: en_US
+author:
+  name: Alex Schittko
+repository: alex4108/alex4108.github.io
+github_username: alex4108
 
 # Build settings
 markdown: kramdown
 permalink: /:year/:month/:day/:title/
 paginate: 10
-gems: [jekyll-paginate]
-plugins: 
+plugins:
+  - jekyll-paginate
   - jekyll-seo-tag
   - jemoji
-  
-# SEO
 
+# SEO
 social:
   name: Alex Schittko
   links:
     - https://github.com/alex4108/
-    - https://linkedin.com/in/aschittko
+    - https://www.linkedin.com/in/aschittko
+
+exclude:
+  - README.md
+  - scripts
+  - vendor
+  - css/main.scss
