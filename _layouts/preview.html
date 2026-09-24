@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="UTF-8">
+  <title>{{ site.title }}</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="robots" content="noindex, follow">
+  {% if page.redirect_to %}<meta http-equiv="refresh" content="0; url={{ page.redirect_to }}">{% endif %}
+
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="/assets/css/style.css" rel="stylesheet" />
+  <link href="/assets/css/colors-dark.css" rel="stylesheet" />
+
+  {% seo %}
+
+  <meta name="google-site-verification" content="KW_c2jmX2rqgRNGSkikiIsGAIIoMZbm3T_Rt0JLk8_Y" />
+  <meta name="msvalidate.01" content="957245CCB2EFACBCCD7AAEE509A1841C" />
+
+</head>
+
+<body>
+
+
+
+  <header id="header">
+    <h1><a href="/preview/"><i class="icon-sun"></i> {{ site.title }}</a></h1>
+    <p>My achievements and findings in Computer Science</p>
+  </header>
+
+
+
+  <div id="page">
+
+
+
+    <div id="sidebar">
+      <nav>
+        <ul>
+          <li><a href="/preview/">Home</a></li>
+          <li><a href="/archives">Archive</a></li>
+          <li><a href="/preview/about/">About</a></li>
+          <li><a href="https://github.com/alex4108">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/aschittko">LinkedIn</a></li>
+          <li><a href="/feed.xml">RSS Feed</a></li>
+        </ul>
+      </nav>
+    </div>
+
+
+
+    <div id="content">
+      {{ content }}
+    </div>
+
+
+
+  </div>
+
+
+
+  <footer id="footer">
+    <p class="copyright" style="text-align: center">
+      BS Computer Science, Erik Jonsson School of Engineering and Computer Science at University of Texas at Dallas<br />
+      Class of 2021<br />
+      Whoosh!<br /></p>
+    <p class="copyright" style="text-align: center">Copyright &copy; {{ site.time | date: '%Y' }} Alex Schittko. Powered by <a href="http://jekyllrb.com">Jekyll</a>, theme by <a href="http://www.webmaster-source.com">Matt Harzewski</a></p>
+  </footer>
+
+
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  <script src="/assets/js/jquery.mobilemenu.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      $('#sidebar nav ul').mobileMenu({'topOptionText': 'Menu', 'prependTo': '#sidebar nav'});
+    });
+  </script>
+
+
+
+</body>
+</html>
