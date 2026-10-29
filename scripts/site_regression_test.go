@@ -167,6 +167,39 @@ func TestOriginalBlogPresentation(t *testing.T) {
 	}
 }
 
+func TestHistoricalListMarkers(t *testing.T) {
+	for _, article := range []struct {
+		path         string
+		lists, steps int
+	}{
+		{"2021/02/04/How-we-used-xcp-ng-to-run-Rosetta-@-home/index.html", 1, 6},
+		{"2021/02/04/SQL-Server-4600-DBs/index.html", 5, 11},
+	} {
+		t.Run(article.path, func(t *testing.T) {
+			ordered := regexp.MustCompile(`(?s)<ol>.*</ol>`).FindString(renderedFile(t, article.path))
+			if strings.Count(ordered, "<ol>") != article.lists || strings.Count(ordered, "</ol>") != article.lists ||
+				strings.Count(ordered, "<li>") != article.steps || strings.Count(ordered, "</li>") != article.steps {
+				t.Fatalf("historical procedure must retain %d ordered lists and %d steps", article.lists, article.steps)
+			}
+			t.Logf("historical ordered markup: %d lists, %d steps", article.lists, article.steps)
+		})
+	}
+
+	for _, stylesheet := range []struct{ name, content string }{
+		{"source", readFile(t, filepath.Join(*sourceRoot, "assets", "css", "style.css"))},
+		{"rendered", renderedFile(t, "assets/css/style.css")},
+	} {
+		for _, marker := range []struct{ list, style string }{{"ol", "decimal"}, {"ul", "disc"}} {
+			t.Run(stylesheet.name+"/"+marker.list, func(t *testing.T) {
+				rule := `(?m)^` + marker.list + `\s*\{\s*list-style:\s*` + marker.style + `;\s*\}`
+				if !regexp.MustCompile(rule).MatchString(stylesheet.content) {
+					t.Errorf("%s stylesheet must explicitly style %s as %s in its own rule", stylesheet.name, marker.list, marker.style)
+				}
+			})
+		}
+	}
+}
+
 func TestWritingLabels(t *testing.T) {
 	oldLabel := regexp.MustCompile(`(?i)Writing\s*/\s*Archive|>\s*Archives?\s*<|title:\s*Archives?\b|writing archive`)
 	for _, path := range []string{"_layouts/default.html", "_layouts/preview.html", "index.html", "archives/index.html", "work/index.html", "preview/index.html", "preview/writing/index.html"} {

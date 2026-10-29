@@ -13,7 +13,10 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 body {
 	line-height: 1;
 }
-ol, ul {
+ol {
+	list-style: decimal;
+}
+ul {
 	list-style: disc;
 }
 blockquote, q {
