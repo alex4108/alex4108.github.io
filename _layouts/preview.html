@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% if page.title and page.title != site.title %}{{ page.title | escape }} | {% endif %}{{ site.title | escape }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, follow">
+  {% if page.redirect_to %}<meta http-equiv="refresh" content="0; url={{ page.redirect_to | relative_url | escape }}">{% endif %}
+  {% seo title=false %}
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/colors-dark.css' | relative_url }}">
+  <meta name="google-site-verification" content="KW_c2jmX2rqgRNGSkikiIsGAIIoMZbm3T_Rt0JLk8_Y">
+  <meta name="msvalidate.01" content="957245CCB2EFACBCCD7AAEE509A1841C">
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  <header id="header">
+    <h1><a href="{{ '/preview/' | relative_url }}"><i class="icon-sun" aria-hidden="true"></i> {{ site.title | escape }}</a></h1>
+    <p>{{ site.description | escape }}</p>
+  </header>
+
+  <div id="page">
+    <aside id="sidebar">
+      <nav aria-label="Primary navigation">
+        <ul>
+          <li><a href="{{ '/preview/' | relative_url }}"{% if page.url == '/preview/' %} aria-current="page"{% endif %}>Home</a></li>
+          <li><a href="{{ '/archives/' | relative_url }}">Writing</a></li>
+          <li><a href="{{ '/preview/about/' | relative_url }}"{% if page.url == '/preview/about/' %} aria-current="page"{% endif %}>About</a></li>
+          <li><a href="https://github.com/alex4108" rel="me external">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/aschittko" rel="me external">LinkedIn</a></li>
+          <li><a href="{{ '/feed.xml' | relative_url }}">RSS Feed</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main id="content" tabindex="-1">
+      {{ content }}
+    </main>
+  </div>
+
+  <footer id="footer">
+    <p class="copyright">
+      BS Computer Science, Erik Jonsson School of Engineering and Computer Science at University of Texas at Dallas<br>
+      Class of 2021<br>
+      Whoosh!<br>
+    </p>
+    <p class="copyright">Copyright &copy; {{ site.time | date: '%Y' }} Alex Schittko. Powered by <a href="https://jekyllrb.com">Jekyll</a>, theme by <a href="https://www.webmaster-source.com">Matt Harzewski</a></p>
+  </footer>
+</body>
+</html>

@@ -1,24 +1,21 @@
 ---
 layout: page
-title: Writing / Archive
+title: Writing
 description: Technical case studies, implementation notes, and project write-ups by Alex Schittko.
 permalink: /archives/
 ---
-<ol class="archive-list">
+<div id="blog-archives">
   {% for post in site.posts %}
-    <li>
-      <article>
-        <p class="archive-date"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %Y" }}</time></p>
-        <h2>
-          {% if post.external-url %}
-            <a href="{{ post.external-url }}" rel="external">{{ post.title }}</a>
-            <a class="anchor" href="{{ post.url | relative_url }}" aria-label="Permalink to {{ post.title }}"><i class="icon-anchor" aria-hidden="true"></i></a>
-          {% else %}
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-          {% endif %}
-        </h2>
-        {% if post.description %}<p>{{ post.description }}</p>{% endif %}
-      </article>
-    </li>
+    <article class="post">
+      <h1>
+        {% if post.external-url %}
+          <a href="{{ post.external-url }}" rel="external">{{ post.title | escape }}</a>
+          <a class="anchor" href="{{ post.url | relative_url }}" aria-label="Permalink to {{ post.title | escape }}"><i class="icon-anchor" aria-hidden="true"></i></a>
+        {% else %}
+          <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        {% endif %}
+      </h1>
+      <div class="post-content">{{ post.description }}<br><i><a href="{{ post.url | relative_url }}">Read more here</a></i></div>
+    </article>
   {% endfor %}
-</ol>
+</div>

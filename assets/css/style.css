@@ -124,38 +124,35 @@ h4 {
 
 /*** Structure ***/
 #page {
-	width: 680px;
+	width: 500px;
 	margin: 0 auto;
 	position: relative;
 }
 
 #header {
-	width: 680px;
+	width: 500px;
 	margin: 40px auto 50px auto;
 }
-#header .site-title {
+#header h1, #header .site-title {
 	font-size: 32px;
-	line-height: 1.25;
 	margin-bottom: 4px;
 }
-#header .site-title a {
+#header h1 a, #header .site-title a {
 	border: none;
 	color: #cb4b16;
 }
 #header .site-description { margin-bottom: 0; }
 
 #footer {
-	width: 680px;
+	width: 500px;
 	margin: 50px auto 20px auto;
 	padding-top: 10px;
 	font-size: 0.85em;
 	border-top: 1px solid #073642;
 	text-align: center;
 }
-#footer p { margin-bottom: 4px; }
-
 #content {
-	width: 680px;
+	width: 500px;
 	margin: 0 auto;
 }
 
@@ -164,7 +161,7 @@ h4 {
 	text-align: right;
 	width: 160px;
 	top: 0;
-	left: -210px;
+	left: -240px;
 }
 
 #sidebar li {
@@ -227,178 +224,6 @@ article .meta {
 
 
 
-/*** Profile pages ***/
-.hero {
-	margin-bottom: 56px;
-}
-.hero h1 {
-	max-width: 650px;
-	font-size: 34px;
-	line-height: 1.25;
-	letter-spacing: -0.02em;
-	margin-bottom: 18px;
-}
-.lead,
-.page-intro {
-	font-size: 16px;
-	line-height: 1.65;
-}
-.eyebrow {
-	color: #2aa198;
-	font-family: "Helvetica Neue", "Helvetica", sans-serif;
-	font-size: 11px;
-	font-weight: bold;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	margin-bottom: 8px;
-}
-.hero-links {
-	margin-top: 24px;
-}
-.hero-links a {
-	display: inline-block;
-	margin-right: 14px;
-}
-.button-link {
-	border: 1px solid #2aa198;
-	padding: 7px 10px;
-}
-.button-link:hover {
-	background: #073642;
-}
-.section-heading {
-	margin-bottom: 18px;
-}
-.section-heading h2,
-.writing-callout h2,
-.page-header h1 {
-	font-size: 22px;
-	line-height: 1.35;
-}
-.page-header {
-	margin-bottom: 34px;
-}
-.page-content > section,
-main > section {
-	margin-bottom: 56px;
-}
-.proof-strip {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 1px;
-	padding: 1px;
-	background: #073642;
-	list-style: none;
-}
-.proof-strip > div {
-	min-width: 0;
-	padding: 18px 10px;
-	background: #002a35;
-	text-align: center;
-}
-.proof-strip dt {
-	color: #cb4b16;
-	font-family: "Helvetica Neue", "Helvetica", sans-serif;
-	font-size: 20px;
-	font-weight: bold;
-	line-height: 1.25;
-}
-.proof-strip dd {
-	font-size: 11px;
-	line-height: 1.4;
-	margin-top: 4px;
-}
-.proof-strip--compact {
-	margin: 24px 0;
-}
-.card-grid,
-.project-list {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 14px;
-	margin-bottom: 18px;
-}
-.work-card,
-.project-list article,
-.case-study {
-	border: 1px solid #073642;
-	padding: 20px;
-}
-.work-card {
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 0;
-}
-.work-card:first-child {
-	grid-column: span 2;
-}
-.work-card h3,
-.project-list h3,
-.case-study h3 {
-	font-size: 16px;
-	line-height: 1.45;
-}
-.work-card h3 a,
-.project-list h3 a,
-.case-study h3 a,
-.archive-list h2 a {
-	border: none;
-}
-.card-link {
-	font-size: 12px;
-	margin-top: auto;
-	margin-bottom: 0;
-}
-.case-study {
-	margin-bottom: 18px;
-}
-.project-list article {
-	margin-bottom: 0;
-}
-.project-list article p:last-child,
-.case-study > :last-child,
-.work-card > :last-child {
-	margin-bottom: 0;
-}
-.principles-list {
-	list-style: none;
-	padding-left: 0;
-}
-.principles-list li {
-	padding: 12px 0;
-	border-bottom: 1px solid #073642;
-}
-.principles-list li:first-child {
-	border-top: 1px solid #073642;
-}
-.writing-callout {
-	border-left: 2px solid #cb4b16;
-	padding-left: 18px;
-}
-.archive-list {
-	list-style: none;
-	padding: 0;
-}
-.archive-list > li {
-	margin: 0;
-}
-.archive-list article {
-	padding: 20px 0;
-	margin: 0;
-	border-bottom: 1px solid #073642;
-}
-.archive-list > li:first-child article {
-	border-top: 1px solid #073642;
-}
-.archive-list h2 {
-	font-size: 17px;
-	line-height: 1.4;
-}
-.archive-date {
-	font-size: 11px;
-	margin-bottom: 4px;
-}
-
 img.left {
 	float: left;
 	margin: 0 1em 1em 0;
@@ -433,7 +258,7 @@ img.center {
 
 
 /*** Media Queries ***/
-@media all and (max-width: 1100px) {
+@media all and (max-width: 870px) {
 
 	#page, #header, #content, #footer {
 		width: inherit;
@@ -446,7 +271,7 @@ img.center {
 		text-align: left;
 		width: 100%;
 		left: 0;
-		margin: 10px 0 28px 0;
+		margin: 10px 0 20px 0;
 	}
 	#sidebar li {
 		display: inline-block;
@@ -463,25 +288,13 @@ img.center {
 
 }
 
-@media all and (max-width: 600px) {
-	#header {
-		margin-top: 24px;
-		margin-bottom: 30px;
-	}
-	.hero h1 {
-		font-size: 27px;
-	}
-	.card-grid,
-	.project-list,
-	.proof-strip {
-		grid-template-columns: 1fr;
-	}
-	.work-card:first-child {
-		grid-column: auto;
-	}
-	.proof-strip > div {
-		text-align: left;
-	}
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+pre {
+	overflow-x: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

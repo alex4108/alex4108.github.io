@@ -1,9 +1,6 @@
 # Site settings
 title: Alex Schittko
-tagline: Reliable platforms, deliberate change.
-description: >-
-  Alex Schittko modernizes legacy systems, automates operational toil, and builds
-  reliable, cost-conscious platforms across cloud, containers, data, and open source.
+description: My achievements and findings in Computer Science
 url: "https://schittko.me"
 baseurl: ""
 lang: en_US
@@ -29,6 +26,8 @@ social:
     - https://www.linkedin.com/in/aschittko
 
 exclude:
+  - Gemfile
+  - Gemfile.lock
   - README.md
   - scripts
   - vendor
