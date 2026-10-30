@@ -70,6 +70,20 @@ func markdownBody(t *testing.T, content string) string {
 	return strings.TrimSpace(content[header[1]:])
 }
 
+type markdownSection struct{ heading, content string }
+
+func markdownSections(content string) []markdownSection {
+	sections := []markdownSection{{}}
+	start := 0
+	for _, heading := range regexp.MustCompile(`(?m)^#{1,2} .+$`).FindAllStringIndex(content, -1) {
+		sections[len(sections)-1].content = content[start:heading[0]]
+		sections = append(sections, markdownSection{heading: content[heading[0]:heading[1]]})
+		start = heading[1]
+	}
+	sections[len(sections)-1].content = content[start:]
+	return sections
+}
+
 func renderedFile(t *testing.T, path string) string {
 	t.Helper()
 	if *siteRoot == "" {
@@ -219,15 +233,110 @@ func TestWritingLabels(t *testing.T) {
 	}
 }
 
-func TestConservativeAbout(t *testing.T) {
+func TestAboutPreservation(t *testing.T) {
 	about := readFile(t, filepath.Join(*sourceRoot, "about", "index.markdown"))
 	want := markdownBody(t, gitFile(t, "preview/about/index.markdown"))
 	got := markdownBody(t, about)
-	if got != want {
-		t.Errorf("About must preserve the complete conservative preview body: got %d bytes, want %d", len(got), len(want))
+	wantSections, gotSections := markdownSections(want), markdownSections(got)
+	if len(gotSections) != len(wantSections) {
+		t.Fatalf("About must retain all major sections: got %d, want %d", len(gotSections), len(wantSections))
+	}
+	for i, section := range wantSections {
+		if gotSections[i].heading != section.heading {
+			t.Fatalf("About section %d: got %q, want %q", i, gotSections[i].heading, section.heading)
+		}
+		switch section.heading {
+		case "", "## Azure!":
+			continue
+		case "## Containers":
+			for _, paragraph := range strings.Split(section.content, "\n\n") {
+				paragraph = strings.TrimSpace(paragraph)
+				if paragraph != "" && !strings.Contains(paragraph, "k8s") && !strings.Contains(gotSections[i].content, paragraph) {
+					t.Errorf("Containers lost an unchanged Docker/Compose/Podman note: %q", paragraph)
+				}
+			}
+		default:
+			if gotSections[i].content != section.content {
+				t.Errorf("About section %q must remain unchanged", section.heading)
+			}
+		}
+	}
+	for _, link := range regexp.MustCompile(`\]\([^)\n]*\)`).FindAllString(want, -1) {
+		if !strings.Contains(got, link) {
+			t.Errorf("About lost an original link destination %q", link)
+		}
+	}
+	for _, paragraph := range strings.Split(want, "\n\n") {
+		if strings.Contains(paragraph, "python3 beta runtime") || strings.Contains(paragraph, "migrations into Azure") {
+			paragraph = strings.ReplaceAll(paragraph, "Automate", "Automation")
+			if !strings.Contains(got, paragraph) {
+				t.Errorf("About lost a historical Azure story: %q", paragraph)
+			}
+		}
+	}
+	for _, story := range []string{
+		"When I first wrote this page in 2021",
+		"brain dump everything I could think of that I'd touched over the previous 20 years",
+		"Dang, that was easy!  Time for coffee...",
+	} {
+		if !strings.Contains(got, story) {
+			t.Errorf("About lost personal context %q", story)
+		}
 	}
 	if !strings.Contains(about, "\nlayout: page\n") || !strings.Contains(about, "\npermalink: /about/\n") || strings.Contains(about, "\nsitemap: false\n") {
 		t.Error("public About must use its public layout, URL and sitemap visibility")
+	}
+}
+
+func TestAboutCurrentExperience(t *testing.T) {
+	sections := make(map[string]string)
+	for _, section := range markdownSections(markdownBody(t, readFile(t, filepath.Join(*sourceRoot, "about", "index.markdown")))) {
+		sections[section.heading] = section.content
+	}
+	rendered := visibleText(renderedFile(t, "about/index.html"))
+	for _, experience := range []struct{ section, name, pattern string }{
+		{"", "Microsoft context", `(?i)\b(experience at|since working at) Microsoft\b`},
+		{"## Containers", "Kubernetes", `(?i)\bKubernetes\b`},
+		{"## Azure!", "virtual machines", `(?i)\bAzure VMs\b`},
+		{"## Azure!", "container registry", `(?i)\bAzure Container Registry\b`},
+		{"## Azure!", "managed Kubernetes", `(?i)\b(Azure Kubernetes Service|AKS)\b`},
+		{"## Azure!", "web hosting", `(?i)\bAzure App Service\b`},
+		{"## Azure!", "managed relational databases", `(?i)\b(Azure SQL Database|Azure Database for MySQL)\b`},
+		{"## Azure!", "NoSQL", `(?i)\bCosmos\s?DB\b`},
+		{"## Azure!", "object storage", `(?i)\bBlob storage\b`},
+		{"## Azure!", "shared storage", `(?i)\bAzure Files\b`},
+		{"## Azure!", "functions", `(?i)\bAzure Functions\b`},
+		{"## Azure!", "API management", `(?i)\b(Azure )?API Management\b`},
+		{"## Azure!", "messaging", `(?i)\b(Storage Queues|Queue Storage|Service Bus)\b`},
+		{"## Azure!", "streaming", `(?i)\bEvent Hubs\b`},
+		{"## Azure!", "analytics", `(?i)\b(Synapse|analytics|data warehous(e|ing))\b`},
+		{"## Azure!", "cache", `(?i)\bRedis\b`},
+		{"## Azure!", "networking", `(?i)\b(virtual networks?|VNets?)\b`},
+		{"## Azure!", "DNS", `(?i)\bAzure DNS\b`},
+		{"## Azure!", "traffic management", `(?i)\bAzure Traffic Manager\b`},
+		{"## Azure!", "secrets and certificates", `(?i)\bKey Vault\b`},
+		{"## Azure!", "monitoring", `(?i)\bAzure Monitor\b`},
+		{"## Azure!", "resource management", `(?i)\b(Azure Resource Manager|ARM)\b`},
+		{"## Azure!", "automation", `(?i)\bAzure Automation\b`},
+	} {
+		t.Run(experience.name, func(t *testing.T) {
+			pattern := regexp.MustCompile(experience.pattern)
+			if !pattern.MatchString(sections[experience.section]) {
+				t.Errorf("updated %s section must cover owner-confirmed %s", experience.section, experience.name)
+			}
+			if !pattern.MatchString(rendered) {
+				t.Errorf("production About must render owner-confirmed %s", experience.name)
+			}
+		})
+	}
+	for _, obsolete := range []struct{ section, pattern string }{
+		{"", `(?i)technology notes, projects, and interests below reflect that time`},
+		{"## Containers", `(?i)(yet to|haven't|have not).*(k8s|Kubernetes)|(only|just) (a )?few (Helm )?charts`},
+		{"## Azure!", `(?i)number two in my skillset|as I grow, I'll use Azure more|haven't worked.*Queues|one day I might pick that up|want to get more hands.on experience|Azure Automate\b|Blob storage is .*cheaper than S3|\* More to come!`},
+	} {
+		if regexp.MustCompile(obsolete.pattern).MatchString(sections[obsolete.section]) {
+			t.Errorf("updated %s section retains obsolete experience/price framing", obsolete.section)
+		}
 	}
 }
 
@@ -406,8 +515,12 @@ func TestRenderedBlogAndAssets(t *testing.T) {
 		renderedHeadings[visibleText(heading[1])] = true
 	}
 	for _, heading := range regexp.MustCompile(`(?m)^#{1,6}\s+(.+)$`).FindAllStringSubmatch(gitFile(t, "preview/about/index.markdown"), -1) {
-		if !renderedHeadings[heading[1]] {
-			t.Errorf("About lost rendered technology/personal section %q", heading[1])
+		want := heading[1]
+		if want == "Azure Automate" {
+			want = "Azure Automation"
+		}
+		if !renderedHeadings[want] {
+			t.Errorf("About lost rendered technology/personal section %q", want)
 		}
 	}
 	for _, path := range []string{"assets/css/style.css", "assets/css/colors-dark.css"} {
@@ -535,19 +648,25 @@ func TestFeedAndSitemapXML(t *testing.T) {
 }
 
 func TestProtectedSourceBytes(t *testing.T) {
-	output, err := exec.Command("git", "-C", *sourceRoot, "ls-tree", "-r", "--name-only", *baseline, "--", "_posts").CombinedOutput()
+	output, err := exec.Command("git", "-C", *sourceRoot, "ls-tree", "-r", "--name-only", *baseline, "--", "_posts", "_layouts", "_sass", "assets", "css", "images", "js", "preview").CombinedOutput()
 	if err != nil {
-		t.Fatalf("list baseline posts: %v\n%s", err, output)
+		t.Fatalf("list protected baseline files: %v\n%s", err, output)
 	}
-	posts := strings.Fields(string(output))
+	protected := strings.Fields(string(output))
+	posts := 0
+	for _, path := range protected {
+		if strings.HasPrefix(path, "_posts/") {
+			posts++
+		}
+	}
 	entries, err := os.ReadDir(filepath.Join(*sourceRoot, "_posts"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(posts) != 5 || len(entries) != 5 {
-		t.Fatalf("must retain exactly five historical source posts: baseline=%d source=%d", len(posts), len(entries))
+	if posts != 5 || len(entries) != 5 {
+		t.Fatalf("must retain exactly five historical source posts: baseline=%d source=%d", posts, len(entries))
 	}
-	for _, path := range append(posts, "CNAME", "preview/about/index.markdown") {
+	for _, path := range append(protected, "CNAME", "_config.yml", "index.html", "archives/index.html", "work/index.html", "feed.xml", "robots.txt", "sitemap.xml", "Gemfile", "Gemfile.lock", "scripts/check_site.py") {
 		if readFile(t, filepath.Join(*sourceRoot, filepath.FromSlash(path))) != gitFile(t, path) {
 			t.Errorf("%s must remain byte-identical to %s", path, *baseline)
 		}
