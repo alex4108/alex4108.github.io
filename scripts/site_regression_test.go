@@ -54,9 +54,14 @@ func readFile(t *testing.T, path string) string {
 
 func gitFile(t *testing.T, path string) string {
 	t.Helper()
-	output, err := exec.Command("git", "-C", *sourceRoot, "show", *baseline+":"+path).CombinedOutput()
+	return gitFileAt(t, *baseline, path)
+}
+
+func gitFileAt(t *testing.T, revision, path string) string {
+	t.Helper()
+	output, err := exec.Command("git", "-C", *sourceRoot, "show", revision+":"+path).CombinedOutput()
 	if err != nil {
-		t.Fatalf("read %s:%s: %v\n%s", *baseline, path, err, output)
+		t.Fatalf("read %s:%s: %v\n%s", revision, path, err, output)
 	}
 	return string(output)
 }
@@ -237,7 +242,14 @@ func TestAboutPreservation(t *testing.T) {
 	about := readFile(t, filepath.Join(*sourceRoot, "about", "index.markdown"))
 	want := markdownBody(t, gitFile(t, "preview/about/index.markdown"))
 	got := markdownBody(t, about)
-	wantSections, gotSections := markdownSections(want), markdownSections(got)
+	var wantSections []markdownSection
+	for _, section := range markdownSections(want) {
+		wantSections = append(wantSections, section)
+		if section.heading == "## Containers" {
+			wantSections = append(wantSections, markdownSection{heading: "## Public Key Infrastructure"})
+		}
+	}
+	gotSections := markdownSections(got)
 	if len(gotSections) != len(wantSections) {
 		t.Fatalf("About must retain all major sections: got %d, want %d", len(gotSections), len(wantSections))
 	}
@@ -246,7 +258,7 @@ func TestAboutPreservation(t *testing.T) {
 			t.Fatalf("About section %d: got %q, want %q", i, gotSections[i].heading, section.heading)
 		}
 		switch section.heading {
-		case "", "## Azure!":
+		case "", "## Azure!", "## Public Key Infrastructure":
 			continue
 		case "## Containers":
 			for _, paragraph := range strings.Split(section.content, "\n\n") {
@@ -285,6 +297,68 @@ func TestAboutPreservation(t *testing.T) {
 	}
 	if !strings.Contains(about, "\nlayout: page\n") || !strings.Contains(about, "\npermalink: /about/\n") || strings.Contains(about, "\nsitemap: false\n") {
 		t.Error("public About must use its public layout, URL and sitemap visibility")
+	}
+}
+
+func TestAboutPKI(t *testing.T) {
+	const experienceBaseline = "95736011f546bb24c5d25986e756fdbdfa31e4d7"
+	about := readFile(t, filepath.Join(*sourceRoot, "about", "index.markdown"))
+	var preserved strings.Builder
+	pki, count := "", 0
+	for _, section := range markdownSections(about) {
+		if section.heading == "## Public Key Infrastructure" {
+			pki = section.content
+			count++
+			continue
+		}
+		preserved.WriteString(section.heading)
+		preserved.WriteString(section.content)
+	}
+	if count != 1 {
+		t.Errorf("About must contain exactly one Public Key Infrastructure section, got %d", count)
+	}
+	if preserved.String() != gitFileAt(t, experienceBaseline, "about/index.markdown") {
+		t.Errorf("all About bytes outside PKI, including Azure/Containers, must remain identical to %s", experienceBaseline)
+	}
+	if regexp.MustCompile(`(?m)^#{1,6}\s`).MatchString(pki) {
+		t.Error("PKI must not introduce additional headings")
+	}
+	for _, link := range regexp.MustCompile(`\]\(([^)\n]*)\)`).FindAllStringSubmatch(pki, -1) {
+		reference, err := url.Parse(link[1])
+		if err != nil {
+			t.Fatal("invalid PKI documentation link")
+		}
+		if reference.Scheme != "https" || reference.User != nil || reference.RawQuery != "" ||
+			(reference.Host != "cert-manager.io" && reference.Host != "letsencrypt.org") {
+			t.Error("PKI links must point only to official public project documentation")
+		}
+	}
+	rendered := ""
+	matches := regexp.MustCompile(`(?s)<h2\b[^>]*>Public Key Infrastructure</h2>(.*?)<h[12]\b`).FindAllStringSubmatch(renderedFile(t, "about/index.html"), -1)
+	if len(matches) != 1 {
+		t.Errorf("production About must render exactly one PKI section, got %d", len(matches))
+	} else {
+		rendered = visibleText(matches[0][1])
+	}
+	for _, concept := range []struct{ name, pattern string }{
+		{"homelab", `(?i)\bhomelab\b`},
+		{"Kubernetes TLS", `(?i)\bKubernetes\b.*\bTLS\b`},
+		{"certificate lifecycle", `(?i)\bcertificate lifecycle\b`},
+		{"cert-manager", `(?i)\bcert-manager\b`},
+		{"Let's Encrypt", `(?i)\bLet['\x{2019}]s Encrypt\b`},
+		{"ACME", `(?i)\bACME\b`},
+		{"Cloudflare DNS-01", `(?i)\bCloudflare\b.*\bDNS-01\b`},
+		{"CA scope", `(?i)\bnot (operating|running) (my own|a) (certificate authority|CA)\b`},
+	} {
+		t.Run(concept.name, func(t *testing.T) {
+			pattern := regexp.MustCompile(concept.pattern)
+			if !pattern.MatchString(pki) {
+				t.Errorf("PKI source must cover %s", concept.name)
+			}
+			if !pattern.MatchString(rendered) {
+				t.Errorf("production PKI section must cover %s", concept.name)
+			}
+		})
 	}
 }
 

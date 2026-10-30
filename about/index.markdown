@@ -31,6 +31,12 @@ I've now worked hands-on with Kubernetes too, beyond deploying a few Helm charts
 
 I haven't used RHEL's podman, and haven't heard much about it, other than it exists.
 
+## Public Key Infrastructure
+
+Certificates are another part of the homelab rabbit hole! In my Kubernetes homelab, I've worked with [cert-manager](https://cert-manager.io/docs/) for TLS certificate lifecycle automation, using [Let's Encrypt](https://letsencrypt.org/docs/) through ACME and Cloudflare DNS-01 challenges.
+
+DNS-01 validates control through DNS instead of an HTTP challenge endpoint. Handy when certificate validation doesn't need another web endpoint! This was Kubernetes TLS automation, not operating my own certificate authority; Let's Encrypt handled the CA side.
+
 ## Ansible
 
 I've used ansible once in a [personal project](https://github.com/alex4108/wp-ansible-kubernetes/tree/main/mariadb-galera), to deploy a [MySQL Galera cluster](https://galeracluster.com/products/)
