@@ -1,12 +1,13 @@
 ---
 layout: page
-title: About 
+title: About
+description: My achievements and findings in Computer Science
 permalink: /about/
 ---
 
-Here, you'll find a collection of works about everything I found time to do, outside of class work.
+Here, you'll find a collection of works about everything I've found time to do.
 
-I'll just go ahead and brain dump everything I can think of that I've touched in the last 20 years that I can recall.
+When I first wrote this page in 2021, I decided to brain dump everything I could think of that I'd touched over the previous 20 years. The technology notes, projects, and interests below reflect that time.
 
 ## Linux
 
@@ -14,11 +15,11 @@ I use Ubuntu as a dev environment under [Windows Subsystem for Linux](https://do
 
 Given that I've used Ubuntu since 12.04 LTS, I've also used Debian 9 and 10 in Virtual Machines.
 
-I'm familiar with CentOS 6 through 8 (RIP...) as we use this as the primary OS for deployments in my current professional role.  This directly translates to Amazon Linux 2, which is RHEL based like CentOS.
+I'm familiar with CentOS 6 through 8 (RIP...) as we used this as the primary OS for deployments in my professional role at the time.  This directly translates to Amazon Linux 2, which is RHEL based like CentOS.
 
 ## Windows
 
-Yeesh, my first computer was Windows 98.  I've been on the Windows train from 98, through XP, Vista, 7, 8, 8.1, and finally 10 (long live!) 
+Yeesh, my first computer was Windows 98.  I've been on the Windows train from 98, through XP, Vista, 7, 8, 8.1, and finally 10 (long live!)
 
 ## Containers
 
@@ -36,22 +37,22 @@ I've used ansible once in a [personal project](https://github.com/alex4108/wp-an
 
 ## Databases
 
-I've used MongoDB, MySQL, and SQLite in personal projects.  In the workplace, we use [Amazon RDS](https://aws.amazon.com/rds/) to host (mostly) AWS Aurora MySQL clusters.  
+I've used MongoDB, MySQL, and SQLite in personal projects.  In the workplace, we used [Amazon RDS](https://aws.amazon.com/rds/) to host (mostly) AWS Aurora MySQL clusters.
 
 Microsoft SQL Server in the workplace seems to be nice for the legacy windows apps.  I like how much documentation exists, and how [docs.microsoft.com](https://docs.microsoft.com) stays up to date, even if you're running a 10 year old SQL Server edition.
 
 ## Virtual Machines
 
-I use Hyper-V on my Windows 10 machine to run VMs locally.  Right now, there's just a Windows Server 2019 VM I used to test [AstroInstaller](https://github.com/alex4108/AstroInstaller).  AstroInstaller is some powershell to automatically install the [Astroneer]() [Dedicated Server]().  The idea was to use this project as a launch configuration for a Virtual Machine template in Azure, however I haven't quite gotten there yet...
+I used Hyper-V on my Windows 10 machine to run VMs locally, including a Windows Server 2019 VM I used to test [AstroInstaller](https://github.com/alex4108/AstroInstaller).  AstroInstaller is some powershell to automatically install the [Astroneer]() [Dedicated Server]().  The idea was to use this project as a launch configuration for a Virtual Machine template in Azure, however I haven't quite gotten there yet...
 
-In the professional world, we use [Amazon EC2](https://aws.amazon.com/ec2/) and [Azure VMs](https://azure.microsoft.com/en-us/services/virtual-machines/) to run our production workloads.  There are a few cases where we prefer [DigitalOcean](https://www.digitalocean.com/), for absolutely-not-critical-at-all workloads that could disappear in an instant with no repercussions.  Aside from VMs in the cloud, I also operate a few [Windows Server Failover Clusters](https://docs.microsoft.com/en-us/windows-server/failover-clustering/failover-clustering-overview) running Hyper-V VMs, for local/on-prem services.  The first week I had this in production, I was giddy, I could finally rest well knowing our praised on-prem services would reboot in the event of a host failure, which was all to frequent for that time.
+In the professional world, we used [Amazon EC2](https://aws.amazon.com/ec2/) and [Azure VMs](https://azure.microsoft.com/en-us/services/virtual-machines/) to run our production workloads.  There were a few cases where we preferred [DigitalOcean](https://www.digitalocean.com/), for absolutely-not-critical-at-all workloads that could disappear in an instant with no repercussions.  Aside from VMs in the cloud, I also operated a few [Windows Server Failover Clusters](https://docs.microsoft.com/en-us/windows-server/failover-clustering/failover-clustering-overview) running Hyper-V VMs, for local/on-prem services.  The first week I had this in production, I was giddy, I could finally rest well knowing our praised on-prem services would reboot in the event of a host failure, which was all to frequent for that time.
 
-I also have a spare piece of metal, a PowerEdge R710 with 2 Xeon X5650's and 64GB of RAM.  It runs [xcp-ng](https://xcp-ng.org/), a community fork of [XenServer](https://xenserver.org/).  Watch out for a blog post highlighting a project I did with [Nate Montgomery](https://github.com/DeathBringer12345), one of my classmates at UTD.
+I also had a spare piece of metal, a PowerEdge R710 with 2 Xeon X5650's and 64GB of RAM.  It ran [xcp-ng](https://xcp-ng.org/), a community fork of [XenServer](https://xenserver.org/).  I wrote a [blog post](/2021/02/04/How-we-used-xcp-ng-to-run-Rosetta-@-home/) highlighting a project I did with [Nate Montgomery](https://github.com/DeathBringer12345), one of my classmates at UTD.
 
 
 ## Python
 
-My first encounter was Python 2.6 in the 9th grade.  I quickly enjoyed the syntax and extensibility of the language.  I've continued to use Python in projects far and wide.  
+My first encounter was Python 2.6 in the 9th grade.  I quickly enjoyed the syntax and extensibility of the language.  I've continued to use Python in projects far and wide.
 
 My favorite Python projects to-date:
 * [Approova, a Discord Bot](https://github.com/alex4108/Approova)
@@ -81,7 +82,7 @@ My first server-side language!  No, really!  I was a huge fan of PHP5 back in th
 Some PHP Projects:
 * [RingCentral Live Boards](https://github.com/alex4108/ringcentral-live-boards).  This one produces pseudo-live dashboards by repeatedly polling the RingCentral API for call data in our organization, and allows our teams to see their Queue's status in a much more unified fashion.
 * [GSheets Sync](https://github.com/alex4108/GSheetsSync).  When I worked in Support, we posted the schedule on google sheets every few weeks.  This one ripped the google sheet and made Google Calendar appointments for all my shifts, making it easy to share my work schedule with the loved ones.
-* [StreamMachine](https://github.com/alex4108/StreamMachine).  Built during the COVID-19 pandemic, it was meant as a way for my inner circle to be able to stream content in 4K, without paying for premium services at Discord or TwitchTV.  
+* [StreamMachine](https://github.com/alex4108/StreamMachine).  Built during the COVID-19 pandemic, it was meant as a way for my inner circle to be able to stream content in 4K, without paying for premium services at Discord or TwitchTV.
 
 ## Bash
 
@@ -93,7 +94,7 @@ Some bash scripts I've written, and like:
 
 ## Java
 
-While I don't have any of my own Java projects published, we use Java heavily in the workplace for REST APIs using [Spring Framework](https://spring.io/)
+While I don't have any of my own Java projects published, we used Java heavily in the workplace for REST APIs using [Spring Framework](https://spring.io/)
 
 ## C/C++
 
@@ -107,9 +108,9 @@ Eventually, I want to write some Rust.  One day.
 
 ## Continuous Integration & Deployment, Pipelines, and Source Control!
 
-In the workplace, we just have a [Jenkins](https://www.jenkins.io/) instance wired up to [BitBucket Hooks](https://confluence.atlassian.com/bitbucketserver/using-repository-hooks-776639836.html) to run tests and deployments as needed.
+In the workplace, we had a [Jenkins](https://www.jenkins.io/) instance wired up to [BitBucket Hooks](https://confluence.atlassian.com/bitbucketserver/using-repository-hooks-776639836.html) to run tests and deployments as needed.
 
-Personally, [Travis-CI](https://travis-ci.com) makes my life really easy with managing _so many_ projects.  You can check out all my deployments on my [Travis-CI Page](https://travis-ci.com/alex4108).  
+Personally, [Travis-CI](https://travis-ci.com) makes my life really easy with managing _so many_ projects.  You can check out all my deployments on my [Travis-CI Page](https://travis-ci.com/alex4108).
 
 I'm really glad Travis-CI chose to be part of the [GitHub Education Pack](https://education.github.com/pack), otherwise I probably would've gone on to learn [GitHub Actions](https://github.com/features/actions).
 
@@ -121,7 +122,7 @@ This one gets it's own section, because why not?
 
 ## Amazon Web Services
 
-In my current role with a Point of Sale SaaS provider, we heavily use AWS to operate development, test, and production workloads.  I'll go ahead and list every AWS service I've used and worked with here.
+In my role at the time with a Point of Sale SaaS provider, we heavily used AWS to operate development, test, and production workloads.  I'll go ahead and list every AWS service I've used and worked with here.
 
 ### RDS
 
@@ -215,7 +216,7 @@ Alas, I haven't worked much with Queues in Azure Storage Accounts.  One day I mi
 
 ### Azure Load Balancing
 
-I really enjoy how LB's in Azure offer the ability to pool outbound connections from the VMs, as well as incoming connections, unlike Amazon's Elastic Load Balancing.  
+I really enjoy how LB's in Azure offer the ability to pool outbound connections from the VMs, as well as incoming connections, unlike Amazon's Elastic Load Balancing.
 
 ### Azure Automate
 
@@ -223,7 +224,7 @@ Okay this one is really cool, I used the python3 beta runtime once to automate c
 
 ### Azure Traffic Manager
 
-The service is comparable to Amazon's Route 53 [route policies](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html), and became super useful during one of our org's migrations into Azure that I headed up.  The use case was simple: we wanted to incrementally shift production load to Azure, so we could monitor for failure and correct as needed, before opening the flood gates.  
+The service is comparable to Amazon's Route 53 [route policies](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html), and became super useful during one of our org's migrations into Azure that I headed up.  The use case was simple: we wanted to incrementally shift production load to Azure, so we could monitor for failure and correct as needed, before opening the flood gates.
 
 * More to come!
 
@@ -239,7 +240,7 @@ When I'm not at the desk, typing away on some blog post or project, you can find
 
 ## Video Games
 
-And like anyone with a computer, I play some video games.  Most notably, right now, some games I've enjoyed are
+And like anyone with a computer, I play some video games.  Some games I enjoyed at the time were
 
 * [Rocket League](https://www.rocketleague.com/)
 * [Rogue Company](https://www.roguecompany.com/), because third person just has a nice perspective

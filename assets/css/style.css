@@ -13,8 +13,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 body {
 	line-height: 1;
 }
-ol, ul {
-	list-style: bullet;
+ol {
+	list-style: decimal;
+}
+ul {
+	list-style: disc;
 }
 blockquote, q {
 	quotes: none;
@@ -45,6 +48,17 @@ a, a:active, a:visited {
 a:hover {
 	background-color: #839496;
 	color: #000000;
+}
+a:focus {
+	outline: 2px solid #2aa198;
+	outline-offset: 3px;
+}
+a:focus:not(:focus-visible) {
+	outline: none;
+}
+a:focus-visible {
+	outline: 2px solid #2aa198;
+	outline-offset: 3px;
 }
 
 p, pre { margin-bottom: 15px; }
@@ -88,6 +102,10 @@ h3 {
 	font-size: 14px;
 	margin: 0 0 10px 0;
 }
+h4 {
+	font-size: 13px;
+	margin: 0 0 10px 0;
+}
 
 
 
@@ -118,13 +136,15 @@ h3 {
 	width: 500px;
 	margin: 40px auto 50px auto;
 }
-#header h1 {
+#header h1, #header .site-title {
 	font-size: 32px;
 	margin-bottom: 4px;
 }
-#header h1 a {
+#header h1 a, #header .site-title a {
 	border: none;
+	color: #cb4b16;
 }
+#header .site-description { margin-bottom: 0; }
 
 #footer {
 	width: 500px;
@@ -132,8 +152,8 @@ h3 {
 	padding-top: 10px;
 	font-size: 0.85em;
 	border-top: 1px solid #073642;
+	text-align: center;
 }
-
 #content {
 	width: 500px;
 	margin: 0 auto;
@@ -157,6 +177,22 @@ h3 {
 	font-family: "Helvetica Neue", "Helvetica", serif;
 	font-size: 1.2em;
 	padding: 2px 4px;
+}
+
+#sidebar a[aria-current="page"] {
+	color: #cb4b16;
+}
+
+.skip-link {
+	position: absolute;
+	left: -9999px;
+	top: 8px;
+	z-index: 10;
+	padding: 8px 12px;
+	background: #073642;
+}
+.skip-link:focus {
+	left: 8px;
 }
 
 
@@ -188,6 +224,8 @@ article .meta {
 	font-size: 0.85em;
 	font-style: italic;
 }
+
+
 
 img.left {
 	float: left;
@@ -236,7 +274,14 @@ img.center {
 		text-align: left;
 		width: 100%;
 		left: 0;
-		margin: 10px 10px 20px 10px;
+		margin: 10px 0 20px 0;
+	}
+	#sidebar li {
+		display: inline-block;
+		margin: 2px 5px 2px 0;
+	}
+	#sidebar ul {
+		padding-left: 0;
 	}
 
 	#sidebar nav select.mnav {
@@ -244,6 +289,21 @@ img.center {
 		margin-bottom: 15px;
 	}
 
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+pre {
+	overflow-x: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		scroll-behavior: auto !important;
+	}
 }
 
 
