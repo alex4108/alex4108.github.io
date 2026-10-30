@@ -7,7 +7,7 @@ permalink: /about/
 
 Here, you'll find a collection of works about everything I've found time to do.
 
-When I first wrote this page in 2021, I decided to brain dump everything I could think of that I'd touched over the previous 20 years. The technology notes, projects, and interests below reflect that time.
+When I first wrote this page in 2021, I decided to brain dump everything I could think of that I'd touched over the previous 20 years. My experience at Microsoft has added a lot to the Azure and container notes, but I'm keeping the old stories, projects, and interests too. Still a brain dump!
 
 ## Linux
 
@@ -27,9 +27,15 @@ You can see from my repositories in my [GitHub account](https://github.com/alex4
 
 I'm a fan of [docker-compose] for it's simplicity.
 
-I've yet to really get under the hood with k8s, but I have deployed a few helm charts.
+I've now worked hands-on with Kubernetes too, beyond deploying a few Helm charts. Still a fan of Docker and Compose; Kubernetes is another part of my container toolbox, not a reason to throw the others out!
 
 I haven't used RHEL's podman, and haven't heard much about it, other than it exists.
+
+## Public Key Infrastructure
+
+Certificates are another part of the homelab rabbit hole! In my Kubernetes homelab, I've worked with [cert-manager](https://cert-manager.io/docs/) for TLS certificate lifecycle automation, using [Let's Encrypt](https://letsencrypt.org/docs/) through ACME and Cloudflare DNS-01 challenges.
+
+DNS-01 validates control through DNS instead of an HTTP challenge endpoint. Handy when certificate validation doesn't need another web endpoint! This was Kubernetes TLS automation, not operating my own certificate authority; Let's Encrypt handled the CA side.
 
 ## Ansible
 
@@ -200,35 +206,59 @@ When I can't use acme.sh, like in the context of [Application Load Balancers](ht
 
 ## Azure!
 
-It's not number two in my heart, but it's number two in my skillset.  As I grow, I'll use Azure more for my online services.
+The Azure side has grown quite a bit since I first wrote this! I've worked across Azure counterparts to the compute, containers, databases, storage, serverless APIs, messaging, analytics, networking, secrets, monitoring, and resource management in my AWS notes above. Similar jobs, different building blocks; these aren't all one-to-one clones.
 
 ### Azure VMs
 
-Probably the most useful service I've found yet.  With built-in's like [Tardigrade](https://azure.microsoft.com/en-us/blog/improving-azure-virtual-machines-resiliency-with-project-tardigrade/) and the possibility of adding resources without a requiring a VM reboot, I definitely prefer Azure VM's over Amazon EC2.
+Back when I first wrote these notes, built-ins like [Tardigrade](https://azure.microsoft.com/en-us/blog/improving-azure-virtual-machines-resiliency-with-project-tardigrade/) and options for adding resources without a VM reboot made Azure VMs a favorite of mine. VMs are still part of the picture, just no longer most of my Azure experience!
 
-Plus, Azure had native VM [Backup](https://docs.microsoft.com/en-us/azure/backup/backup-azure-vms-introduction) before [AWS Backup](https://aws.amazon.com/backup/) existed.  +1 for Azure!
+Azure also had native VM [Backup](https://docs.microsoft.com/en-us/azure/backup/backup-azure-vms-introduction) before [AWS Backup](https://aws.amazon.com/backup/) existed. That was my original "+1 for Azure!" moment.
+
+### Containers and App Service
+
+Azure Container Registry gives me a home for container images, much like ECR. I've also worked with Azure Kubernetes Service (AKS), and Azure App Service for managed web hosting. I still like having VMs, containers, and managed web apps as options; not everything needs to be hosted the same way!
 
 ### Azure Storage Accounts
 
-Blob storage is _much_ cheaper than S3 if used appropriately.  Plus with [Azure Files](https://azure.microsoft.com/en-us/services/storage/files/), I can provision SMB mounts with a few button clicks or a Terraform deployment.  Dang, that was easy!  Time for coffee...
+Blob storage fills the object-storage role I used S3 for. My original price comparison was a note from that time, not a blanket rule for today's workloads. Access patterns, redundancy, and data transfer matter! Plus with [Azure Files](https://azure.microsoft.com/en-us/services/storage/files/), I can provision SMB mounts with a few button clicks or a Terraform deployment.  Dang, that was easy!  Time for coffee...
 
-Alas, I haven't worked much with Queues in Azure Storage Accounts.  One day I might pick that up...
+### Managed Databases and Cosmos DB
+
+Managed relational databases and NoSQL are both part of my Azure experience now, including Azure SQL Database, Azure Database for MySQL, and Azure Cosmos DB. Different data models and tradeoffs, but the same preference for letting a managed service take on the database babysitting where it makes sense!
+
+### Functions and APIs
+
+Azure Functions and Azure API Management are no longer "one day" items for me. Functions for event-driven code, API Management for the API front door. I still like the serverless idea from the Lambda notes above; the Azure pieces have their own configuration and tradeoffs to learn.
+
+### Messaging, Analytics, and Cache
+
+I've worked with Azure Queue Storage for queued work and Azure Event Hubs for event streams. A queue and an event stream aren't the same thing, even if both get data from here to there!
+
+Azure Synapse Analytics covers the analytics/data-warehouse side of my experience, and managed Redis caching is in the mix too. Those fit the same broad jobs as Redshift and ElastiCache in my AWS notes, not a promise that I can swap one for the other without changing anything!
 
 ### Azure Load Balancing
 
-I really enjoy how LB's in Azure offer the ability to pool outbound connections from the VMs, as well as incoming connections, unlike Amazon's Elastic Load Balancing.
+I liked Azure Load Balancer's outbound connection options for VMs as well as its inbound rules; that was a useful difference from the AWS load balancers I was using at the time. Getting traffic to healthy backends and getting traffic out of a VM are related, but different jobs!
 
-### Azure Automate
+### Networking and DNS
 
-Okay this one is really cool, I used the python3 beta runtime once to automate cleaning of scheduled backups.  I must say, getting off the ground with python3 because of the weird way Automate handles dependencies was tricky, but once I figured it out, it was all smooth sailing.  I like Azure Automate!
+Virtual networks, subnets, network security groups, routing, peering, NAT, VPN connectivity, and Azure DNS are part of my Azure experience too. The names change from VPC land, but knowing where a packet goes (and what is allowed to stop it) is still pretty important!
+
+### Secrets and Monitoring
+
+Azure Key Vault covers the secrets and certificates side, rather than stuffing credentials into application configuration. Azure Monitor and Log Analytics cover the metrics and logs side of my Azure experience. Different service names, same need to know what is happening and why!
+
+### Resource Management
+
+Azure Resource Manager, resource groups, and subscriptions are part of how I work with Azure resources. I still prefer Terraform for repeatable infrastructure. The portal is handy for looking around, but I'd rather not have to remember every button I clicked to build something!
+
+### Azure Automation
+
+Okay this one is really cool, I used the python3 beta runtime once to automate cleaning of scheduled backups.  I must say, getting off the ground with python3 because of the weird way Automation handles dependencies was tricky, but once I figured it out, it was all smooth sailing.  I like Azure Automation!
 
 ### Azure Traffic Manager
 
 The service is comparable to Amazon's Route 53 [route policies](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html), and became super useful during one of our org's migrations into Azure that I headed up.  The use case was simple: we wanted to incrementally shift production load to Azure, so we could monitor for failure and correct as needed, before opening the flood gates.
-
-* More to come!
-
-I want to get more hands on experience using Azure App Services, Azure Functions, and CosmosDB.  These seem like the tools I need to evolve my Serverless on Azure skills.
 
 # Free Time
 

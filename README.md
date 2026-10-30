@@ -19,7 +19,7 @@ GOMAXPROCS=2 go test scripts/site_regression_test.go -v -args -source "$PWD" -si
 GOMAXPROCS=2 go vet scripts/site_regression_test.go
 ```
 
-The unchanged Python checker validates internal anchor/source links, fragments, and all five published article URLs, and checks that feed/robots/sitemap files exist. The Go checks additionally parse RSS and sitemap XML, verify their exact public URL sets, protect original post/CNAME bytes and the complete conservative About text, and check the rendered theme, Writing labels, titles, canonical links, SEO metadata, and preview indexing.
+The unchanged Python checker validates internal anchor/source links, fragments, and all five published article URLs, and checks that feed/robots/sitemap files exist. The Go checks additionally parse RSS and sitemap XML, verify their exact public URL sets, protect original post/CNAME/theme/preview bytes and unchanged About sections, require the refreshed Azure/Kubernetes experience, and check the rendered theme, Writing labels, titles, canonical links, SEO metadata, and preview indexing.
 
 Both layouts explicitly escape `site.title` in the HTML title and header. A page title is prepended when present; `seo title=false` retains one SEO metadata block without generating a second title. To check escaping, build to another external destination with an additional Jekyll configuration (`--config _config.yml,/absolute/path/to/title.yml`) containing:
 
